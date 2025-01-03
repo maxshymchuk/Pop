@@ -20,7 +20,7 @@ class Config {
             right: 'ArrowRight',
             down: 'ArrowDown',
             left: 'ArrowLeft',
-            fire: 'ControlRight',
+            fire: 'Period',
         }
     }
 

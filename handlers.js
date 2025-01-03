@@ -1,5 +1,5 @@
 import { Config } from "./classes/Config.js";
-import { SKEYS } from "./classes/engine/index.js";
+import { SKEYS } from "./classes/engine/Stats.js";
 import { Enemy } from "./classes/entities/index.js";
 import { isOffScreen, throttle } from "./utils/helpers.js";
 import { rules } from "./utils/rules.js";
