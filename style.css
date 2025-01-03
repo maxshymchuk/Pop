@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+.fullscreen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu.content {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.entity {
+    position: absolute;
+    transform: translate(-50%, -50%)
+}
+
+.entity.player {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background-color: green;
+}
+
+.entity.projectile { 
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: blue;
+}
+
+.entity.enemy {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    background-color: red;
+}
+
+.interface {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0.75;
+}
+
+.interface .killed {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 30px;
+}
+
+.interface .hp {
+    position: absolute;
+    left: 50px;
+    bottom: 50px;
+    border: 1px solid #000;
+}
