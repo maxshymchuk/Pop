@@ -6,7 +6,7 @@ import { Controls } from "./Controls.js";
 import { MenuController } from "./controllers/MenuController.js";
 import { PLAYER } from "../entities/Player.js";
 import { InterfaceController } from "./controllers/InterfaceController.js";
-import { RULES, RulesController } from "./controllers/RulesController.js";
+import { RulesController } from "./controllers/RulesController.js";
 
 const MODE = {
     Single: 'single',
@@ -20,7 +20,7 @@ class Engine {
     
     #menu = null;
     #interface = new InterfaceController(this, Config.interface);
-    #rulesController = new RulesController(this, RULES.Initial);
+    #rules = new RulesController(this);
 
     #stats = new Stats();
     #controls = new Controls();
@@ -54,6 +54,7 @@ class Engine {
                 this.#mode = mode;
                 this.#running = true;
                 this.#stats.reset();
+                this.#rules.reset();
                 this.#enemiesPool.clear();
                 this.#projectilesPool.clear();
                 this.#check();
@@ -119,8 +120,8 @@ class Engine {
         return this.#stats;
     }
 
-    get rulesController() {
-        return this.#rulesController;
+    get rules() {
+        return this.#rules;
     }
 
     get controls() {
@@ -151,7 +152,7 @@ class Engine {
         this.#check();
         this.#menu.check();
         this.#interface.check();
-        this.#rulesController.check(this);
+        this.#rules.check(this);
         if (this.#running) callback();
         window.requestAnimationFrame(() => this.tick(callback));
     }

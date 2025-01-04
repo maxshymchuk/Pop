@@ -2,6 +2,7 @@ import { weapons } from "../../../utils/weapons.js";
 import { Config } from "../../Config.js";
 import { SKEYS } from "../Stats.js";
 import { Weapon } from "../../entities/index.js";
+import { Controller } from "./Controller.js";
 
 const RULES = {
     Initial: 'initial',
@@ -49,29 +50,30 @@ const rules = {
     }
 }
 
-class RulesController {
-    #engine = null;
-    #appliedRules = new Set();
+const DEFAULT_RULES = new Set([RULES.Initial]);
+
+class RulesController extends Controller {
+    #applied = DEFAULT_RULES;
 
     constructor(engine, initial) {
-        this.#engine = engine;
-        this.#appliedRules = new Set(typeof initial === 'array' ? initial : [initial]);
+        super(engine);
+        this.#applied = new Set(typeof initial === 'array' ? initial : [initial]);
     }
 
     reset() {
-        this.#appliedRules = {};
+        this.#applied = DEFAULT_RULES;
     }
 
     check() {
         const rulesToApply = new Set();
         for (let rule in rules) {
-            if (rules[rule].condition(this.#engine) && !this.#appliedRules.has(rule)) {
+            if (rules[rule].condition(this.engine) && !this.#applied.has(rule)) {
                 rulesToApply.add(rule);
             }
         }
         rulesToApply.forEach(rule => {
-            rules[rule].change(this.#engine);
-            this.#appliedRules.add(rule);
+            rules[rule].change(this.engine);
+            this.#applied.add(rule);
         });
     }
 }
