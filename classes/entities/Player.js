@@ -11,14 +11,13 @@ class Player extends Entity {
 
         super({ node: Config.player, ...rest });
 
-        this.#weapon = new Weapon(this);
+        this.#weapon = new Weapon(this, weapon);
 
         if (speed) this.#speed = speed;
     }
     
     fire() {
         return this.#weapon.fire();
-        // this.#weapons.forEach(weapon => weapon.fire());
     }
 
     get speed() {

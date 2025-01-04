@@ -4,6 +4,7 @@ import { Interface } from "./Interface.js";
 import { Player } from '../entities/index.js';
 import { Stats } from "./Stats.js";
 import { Controls } from "./Controls.js";
+import { Menu } from "./Menu.js";
 
 const MODE = {
     Single: 'single',
@@ -15,6 +16,7 @@ class Engine {
     #mode = null;
     #root = null;
     
+    #menu = null;
     #interface = new Interface();
     #stats = new Stats();
     #controls = new Controls();
@@ -23,62 +25,72 @@ class Engine {
     #enemiesPool = new Pool();
     #projectilesPool = new Pool();
 
+    #show() {
+        this.#root.classList.remove('hidden');
+    }
+
+    #hide() {
+        this.#root.classList.add('hidden');
+    }
+
     #check() {
         if (this.#running) {
-            this.#root.classList.remove('hidden');
-
-            Config.menu.classList.add('hidden');
-            Config.interface.classList.remove('hidden');
+            this.#show();
+            this.#menu.hide();
+            this.#interface.show();
         } else {
-            this.#root.classList.add('hidden');
-
-            Config.menu.classList.remove('hidden');
-            Config.interface.classList.add('hidden');
+            this.#hide();
+            this.#menu.show();
+            this.#interface.hide();
         }
     }
 
     constructor(root) {
+        if (!root) throw new Error('Root element must be provided');
         this.#root = root;
+
+        this.#menu = new Menu({ 
+            onSingleClick: () => {
+                this.#mode = MODE.Single;
+                this.#running = true;
+                this.#playersPool.clear().add(new Player({
+                    x: window.innerWidth / 2, 
+                    y: window.innerHeight - 200, 
+                    speed: 10, 
+                    firingRate: 300,
+                    hp: 100
+                }));
+                this.#check();
+            },
+            onMultiClick: () => {
+                this.#mode = MODE.Multi;
+                this.#running = true;
+                this.#playersPool.clear().add(
+                    new Player({
+                        x: window.innerWidth / 3, 
+                        y: window.innerHeight - 200, 
+                        speed: 10, 
+                        firingRate: 300,
+                        hp: 100
+                    }),
+                    new Player({
+                        x: window.innerWidth / 3 * 2, 
+                        y: window.innerHeight - 200, 
+                        speed: 10, 
+                        firingRate: 300,
+                        hp: 100
+                    }),
+                );
+                this.#check();
+            }
+        })
+
+        this.#menu.show();
 
         document.addEventListener('keydown', (e) => {
             if (e.code === Config.bindings.pause) {
                 this.#running = !this.#running;
             }
-        })
-
-        Config.menu.querySelector('.single').addEventListener('click', () => {
-            this.#mode = MODE.Single;
-            this.#running = true;
-            this.#playersPool.clear().add(new Player({
-                x: window.innerWidth / 2, 
-                y: window.innerHeight - 200, 
-                speed: 10, 
-                firingRate: 300,
-                hp: 100
-            }));
-            this.#check();
-        })
-
-        Config.menu.querySelector('.multi').addEventListener('click', () => {
-            this.#mode = MODE.Multi;
-            this.#running = true;
-            this.#playersPool.clear().add(
-                new Player({
-                    x: window.innerWidth / 3, 
-                    y: window.innerHeight - 200, 
-                    speed: 10, 
-                    firingRate: 300,
-                    hp: 100
-                }),
-                new Player({
-                    x: window.innerWidth / 3 * 2, 
-                    y: window.innerHeight - 200, 
-                    speed: 10, 
-                    firingRate: 300,
-                    hp: 100
-                }),
-            );
-            this.#check();
         })
     }
 

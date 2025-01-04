@@ -3,25 +3,24 @@ import { throttle } from "../../utils/helpers.js";
 import { Projectile } from "./Projectile.js";
 
 class Weapon {
-    #entity = null;
+    #owner = null;
     #config = null;
 
     constructor(entity, config = weapons.Pistol) {
-        this.#entity = entity;
+        this.#owner = entity;
         this.#config = config;
     }
 
     #trottledProjectileFunction = throttle(() => {
-        let projectiles = [];
-        const trajectories = this.#config.pattern.trajectories;
-        for (let i = 0; i < trajectories.length; i++) {
-            projectiles.push(new Projectile(this.#entity, trajectories[i]));
-        }
-        return projectiles;
+        return this.#config.pattern.trajectories.map(trajectory => new Projectile(this.#owner, trajectory(this.#owner)))
     });
 
     fire() {
         return this.#trottledProjectileFunction(1000 / this.#config.firingRate) ?? [];
+    }
+
+    get owner() {
+        return this.#owner;
     }
 
     get config() {

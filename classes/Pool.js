@@ -14,6 +14,9 @@ class Pool {
     }
 
     clear() {
+        this.entities.forEach(entity => {
+            entity.delete();
+        })
         this.#entities = {};
         return this;
     }
