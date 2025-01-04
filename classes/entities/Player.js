@@ -2,14 +2,19 @@ import { Entity } from './Entity.js';
 import { Config } from '../Config.js';
 import { Weapon } from './Weapon.js';
 
+const PLAYER = {
+    First: 'first',
+    Second: 'second'
+}
+
 class Player extends Entity {
     #speed = 0;
     #weapon = null;
 
     constructor(initial) {
-        const { speed, weapon, ...rest } = initial ?? {};
+        const { player = PLAYER.First, speed, weapon, ...rest } = initial ?? {};
 
-        super({ node: Config.player, ...rest });
+        super({ node: player === PLAYER.First ? Config.player1 : Config.player2, ...rest });
 
         this.#weapon = new Weapon(this, weapon);
 
@@ -37,4 +42,4 @@ class Player extends Entity {
     }
 }
 
-export { Player };
+export { Player, PLAYER };

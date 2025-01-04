@@ -2,7 +2,8 @@ class Config {
     static #app = document.querySelector('.app');
     static #menu = document.querySelector('.menu');
     static #interface = document.querySelector('.interface');
-    static #player = document.querySelector('.player');
+    static #player1 = document.querySelector('.player.player1');
+    static #player2 = document.querySelector('.player.player2');
     static #enemy = document.querySelector('.enemy');
     static #projectile = document.querySelector('.projectile');
 
@@ -44,8 +45,12 @@ class Config {
         return this.#interface;
     }
 
-    static get player() {
-        return this.#player;
+    static get player1() {
+        return this.#player1;
+    }
+
+    static get player2() {
+        return this.#player2;
     }
 
     static get enemy() {

@@ -1,10 +1,12 @@
 import { Pool } from "../Pool.js";
 import { Config } from "../Config.js";
-import { Interface } from "./Interface.js";
 import { Player } from '../entities/index.js';
 import { Stats } from "./Stats.js";
 import { Controls } from "./Controls.js";
-import { Menu } from "./Menu.js";
+import { MenuController } from "./controllers/MenuController.js";
+import { PLAYER } from "../entities/Player.js";
+import { InterfaceController } from "./controllers/InterfaceController.js";
+import { RULES, RulesController } from "./controllers/RulesController.js";
 
 const MODE = {
     Single: 'single',
@@ -17,7 +19,9 @@ class Engine {
     #root = null;
     
     #menu = null;
-    #interface = new Interface();
+    #interface = new InterfaceController(this, Config.interface);
+    #rulesController = new RulesController(this, RULES.Initial);
+
     #stats = new Stats();
     #controls = new Controls();
 
@@ -36,12 +40,8 @@ class Engine {
     #check() {
         if (this.#running) {
             this.#show();
-            this.#menu.hide();
-            this.#interface.show();
         } else {
             this.#hide();
-            this.#menu.show();
-            this.#interface.hide();
         }
     }
 
@@ -49,39 +49,44 @@ class Engine {
         if (!root) throw new Error('Root element must be provided');
         this.#root = root;
 
-        this.#menu = new Menu({ 
-            onSingleClick: () => {
-                this.#mode = MODE.Single;
+        this.#menu = new MenuController(this, Config.menu, { 
+            onStart: (mode) => {
+                this.#mode = mode;
                 this.#running = true;
-                this.#playersPool.clear().add(new Player({
-                    x: window.innerWidth / 2, 
-                    y: window.innerHeight - 200, 
-                    speed: 10, 
-                    firingRate: 300,
-                    hp: 100
-                }));
+                this.#stats.reset();
+                this.#enemiesPool.clear();
+                this.#projectilesPool.clear();
                 this.#check();
-            },
-            onMultiClick: () => {
-                this.#mode = MODE.Multi;
-                this.#running = true;
-                this.#playersPool.clear().add(
-                    new Player({
-                        x: window.innerWidth / 3, 
+                if (mode === MODE.Single) {
+                    this.#playersPool.clear().add(new Player({
+                        player: PLAYER.First,
+                        x: window.innerWidth / 2, 
                         y: window.innerHeight - 200, 
                         speed: 10, 
                         firingRate: 300,
                         hp: 100
-                    }),
-                    new Player({
-                        x: window.innerWidth / 3 * 2, 
-                        y: window.innerHeight - 200, 
-                        speed: 10, 
-                        firingRate: 300,
-                        hp: 100
-                    }),
-                );
-                this.#check();
+                    }));
+                }
+                if (mode === MODE.Multi) {
+                    this.#playersPool.clear().add(
+                        new Player({
+                            player: PLAYER.First,
+                            x: window.innerWidth / 3, 
+                            y: window.innerHeight - 200, 
+                            speed: 10, 
+                            firingRate: 300,
+                            hp: 100
+                        }),
+                        new Player({
+                            player: PLAYER.Second,
+                            x: window.innerWidth / 3 * 2, 
+                            y: window.innerHeight - 200, 
+                            speed: 10, 
+                            firingRate: 300,
+                            hp: 100
+                        }),
+                    );
+                }
             }
         })
 
@@ -114,6 +119,10 @@ class Engine {
         return this.#stats;
     }
 
+    get rulesController() {
+        return this.#rulesController;
+    }
+
     get controls() {
         return this.#controls;
     }
@@ -140,9 +149,12 @@ class Engine {
 
     tick(callback) {
         this.#check();
+        this.#menu.check();
+        this.#interface.check();
+        this.#rulesController.check(this);
         if (this.#running) callback();
         window.requestAnimationFrame(() => this.tick(callback));
     }
 }
 
-export { Engine };
+export { Engine, MODE };

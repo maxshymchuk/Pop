@@ -7,7 +7,6 @@ import {
     interfaceHandler, 
     playersHandler, 
     projectilesHandler, 
-    rulesHandler 
 } from './handlers.js';
 
 Config.playerCount = 1;
@@ -23,7 +22,6 @@ function init() {
         enemiesHandler(engine);
         projectilesHandler(engine);
         collisionsHandler(engine);
-        rulesHandler(engine);
         interfaceHandler(engine);
     })
 }

@@ -9,18 +9,27 @@
 </head>
 <body>
     <div class="menu fullscreen hidden">
-        <div class="menu_content">
-            <h1>Pop Game</h1>
-            <button class="single">Single player</button>
-            <button class="multi">Multi player</button>
-            <p>First player: WASD + Space</p>
-            <p>Second player: Arrows + Period (.)</p>
+        <div class="menu__content">
+            <div class="menu__title">Pop Game</div>
+            <div class="menu__grid">
+                <div class="menu__grid-cell">
+                    <button class="single">Single player</button>
+                    <button class="multi">Multi player</button>
+                </div>
+                <div class="menu__grid-cell">
+                    <div class="menu__title--sub">
+                        Key Bindings
+                    </div>
+                    <div class="bindings"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="app hidden"></div>
     <div class="templates hidden">
         <div class="entity projectile"></div>
-        <div class="entity player"></div>
+        <div class="entity player player1"></div>
+        <div class="entity player player2"></div>
         <div class="entity enemy"></div>
         <div class="entity bonus"></div>
     </div>

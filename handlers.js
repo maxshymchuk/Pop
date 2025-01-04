@@ -44,17 +44,6 @@ function projectilesHandler(engine) {
     });
 }
 
-const rulesHandler = (() => {
-    let appliedRule = null;
-    return (engine) => {
-        rules.forEach(rule => {
-            if (appliedRule === rule) return;
-            const newRule = rule.apply(engine);
-            if (newRule) appliedRule = newRule;
-        });
-    }
-})();
-
 function interfaceHandler(engine) {
     engine.interface.killed(engine.stats.get(SKEYS.EnemiesKilled));
     engine.interface.hp(engine.playersPool.entities[0].hp);
@@ -93,7 +82,6 @@ export {
     enemiesHandler, 
     projectilesHandler, 
     collisionsHandler, 
-    rulesHandler, 
     interfaceHandler, 
     createEnemyHandler 
 };

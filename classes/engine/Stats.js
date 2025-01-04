@@ -2,13 +2,19 @@ const SKEYS = {
     EnemiesKilled: 'enemiesKilled'
 }
 
+const DEFAULT_STATS = {
+    [SKEYS.EnemiesKilled]: 0
+}
+
 class Stats {
-    #data = {
-        [SKEYS.EnemiesKilled]: 0
-    };
+    #data = { ...DEFAULT_STATS };
 
     constructor(initial) {
         if (initial) this.#data = initial;
+    }
+
+    reset() {
+        this.#data = { ...DEFAULT_STATS };
     }
 
     set(key, valueOrCallback) {

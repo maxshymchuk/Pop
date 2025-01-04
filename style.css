@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+:root {
+    --fs-title: 30px;
+    --fs-title--sub: 20px;
+}
+
 body {
     margin: 0;
     position: relative;
@@ -22,6 +27,14 @@ body {
     visibility: hidden;
 }
 
+.player1 {
+    background-color: green;
+}
+
+.player2 {
+    background-color: orange;
+}
+
 .menu {
     padding-top: 200px;
     /* display: flex;
@@ -30,10 +43,29 @@ body {
     justify-content: center; */
 }
 
-.menu .menu_content {
+.menu__content {
     margin: 0 auto;
     max-width: 400px;
     max-height: 400px;
+}
+
+.menu__title {
+    font-size: var(--fs-title);
+    margin: 20px 0;
+}
+
+.menu__title--sub {
+    font-size: var(--fs-title--sub);
+    margin: 10px 0;
+}
+
+.menu__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.menu__grid-cell {
+    display: block;
 }
 
 .entity {
@@ -45,7 +77,6 @@ body {
     border-radius: 50%;
     width: 100px;
     height: 100px;
-    background-color: green;
 }
 
 .entity.projectile { 
@@ -83,5 +114,6 @@ body {
     position: absolute;
     left: 50px;
     bottom: 50px;
+    padding: 10px;
     border: 1px solid #000;
 }

@@ -1,6 +1,7 @@
-import { Config } from "../Config.js";
+import { Config } from "../../Config.js";
+import { Controller } from "./Controller.js";
 
-class Interface {
+class InterfaceController extends Controller {
     #killed = Config.interface.querySelector('.killed');
     #hp = Config.interface.querySelector('.hp');
 
@@ -14,13 +15,13 @@ class Interface {
         this.#hp.innerText = `${hp} / 100`;
     }
 
-    hide() {
-        Config.interface.classList.add('hidden');
-    }
-
-    show() {
-        Config.interface.classList.remove('hidden');
+    check() {
+        if (this.engine.running) {
+            this.show();
+        } else {
+            this.hide();
+        }
     }
 }
 
-export { Interface };
+export { InterfaceController };
